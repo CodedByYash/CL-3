@@ -1,0 +1,169 @@
+🔧 Step 1: Create the Interface (Hotel.java)
+
+import java.rmi.*;
+
+public interface Hotel extends Remote {
+    String bookRoom(String guestName) throws RemoteException;
+    String cancelBooking(String guestName) throws RemoteException;
+}
+
+
+ Step 2: Create the Server Class (HotelServer.java)
+
+
+import java.rmi.*;
+import java.rmi.server.*;
+import java.rmi.registry.*;
+import java.util.*;
+
+public class HotelServer extends UnicastRemoteObject implements Hotel {
+    private Map<String, String> bookings;
+
+    public HotelServer() throws RemoteException {
+        bookings = new HashMap<>();
+        System.out.println("Hotel Server started...");
+    }
+
+    public String bookRoom(String guestName) throws RemoteException {
+        if (bookings.containsKey(guestName)) {
+            return "Guest " + guestName + " already has a booking.";
+        } else {
+            bookings.put(guestName, "Room booked");
+            return "Room successfully booked for " + guestName;
+        }
+    }
+
+    public String cancelBooking(String guestName) throws RemoteException {
+        if (bookings.containsKey(guestName)) {
+            bookings.remove(guestName);
+            return "Booking cancelled for " + guestName;
+        } else {
+            return "No booking found for " + guestName;
+        }
+    }
+
+    public static void main(String[] args) {
+        try {
+            LocateRegistry.createRegistry(1099); // Start RMI registry
+            HotelServer server = new HotelServer();
+            Naming.rebind("HotelService", server);
+            System.out.println("HotelService bound in registry.");
+        } catch (Exception e) {
+            System.out.println("Server error: " + e);
+        }
+    }
+}
+
+
+🧑‍💻 Step 3: Create the Client Class (HotelClient.java)
+
+import java.rmi.*;
+import java.util.*;
+
+public class HotelClient {
+    public static void main(String[] args) {
+        try {
+            Hotel hotel = (Hotel) Naming.lookup("rmi://localhost/HotelService");
+
+            Scanner sc = new Scanner(System.in);
+            while (true) {
+                System.out.println("\nHotel Booking System");
+                System.out.println("1. Book Room");
+                System.out.println("2. Cancel Booking");
+                System.out.println("3. Exit");
+                System.out.print("Enter your choice: ");
+                int choice = sc.nextInt();
+                sc.nextLine(); // consume newline
+
+                switch (choice) {
+                    case 1:
+                        System.out.print("Enter guest name: ");
+                        String guestBook = sc.nextLine();
+                        System.out.println(hotel.bookRoom(guestBook));
+                        break;
+                    case 2:
+                        System.out.print("Enter guest name to cancel: ");
+                        String guestCancel = sc.nextLine();
+                        System.out.println(hotel.cancelBooking(guestCancel));
+                        break;
+                    case 3:
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice.");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Client error: " + e);
+        }
+    }
+}
+
+
+✅ Steps to Run in BlueJ:
+Open BlueJ IDE.
+
+Create a new project.
+
+Create the 3 files: Hotel.java, HotelServer.java, and HotelClient.java.
+
+Compile all files.
+
+Right-click HotelServer and select "void main(String[] args)" to start the server.
+
+Then, right-click HotelClient and select "void main(String[] args)" to run the client.
+
+Use the terminal to book/cancel rooms.
+
+
+
+✅ Step-by-Step Instructions
+1. Start the RMI Server
+In the "BlueJ: Method Call" popup for HotelServer.main(String[] args), make sure the argument field contains {} (which it already does).
+
+Click OK to start the server.
+
+You should see output in the terminal like:
+
+arduino
+Copy
+Edit
+Hotel Server started...
+HotelService bound in registry.
+2. Start the RMI Client
+Now go to the second popup: HotelClient.main(String[] args).
+
+Also ensure it has {} in the argument field.
+
+Click OK to run the client.
+
+The terminal should prompt:
+
+markdown
+Copy
+Edit
+Hotel Booking System
+1. Book Room
+2. Cancel Booking
+3. Exit
+Enter your choice:
+Now you can enter numbers in the terminal to book/cancel rooms.
+
+❗ If You Encounter Errors Like Connection Refused or NotBoundException:
+Make sure:
+
+You're running the server before the client.
+
+RMI registry is started in code with:
+
+java
+Copy
+Edit
+LocateRegistry.createRegistry(1099);
+You're using the correct URL in Naming.lookup():
+
+java
+Copy
+Edit
+Hotel hotel = (Hotel) Naming.lookup("rmi://localhost/HotelService");
+Let me know if anything doesn't work or if you'd like to test this with another client instance (like simulating multiple users)!
