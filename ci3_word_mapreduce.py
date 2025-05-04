@@ -62,3 +62,22 @@ if __name__ == "__main__":
         # Switch between char_reducer or word_reducer here
         # char_reducer()  # ← For character count
         word_reducer()  # ← Uncomment this instead for word count
+
+# hadoop jar C:\hadoop\share\hadoop\tools\lib\hadoop-streaming-3.2.4.jar ^
+# -files ci3_word_mapreduce.py ^
+# -mapper "python ci3_word_mapreduce.py --mapper" ^
+# -reducer "python ci3_word_mapreduce.py --reducer" ^
+# -input file:///C:\Users\ADMIN\OneDrive\Documents\cl-3\input.txt ^
+# -output file:///C:\Users\ADMIN\OneDrive\Documents\cl-3\char_output
+
+# type C:\Users\ADMIN\OneDrive\Documents\cl-3\char_output\part-00000
+
+
+# hadoop jar C:\hadoop\share\hadoop\tools\lib\hadoop-streaming-3.2.4.jar ^
+# -files ci3_word_mapreduce.py ^
+# -mapper "python ci3_word_mapreduce.py --mapper" ^
+# -reducer "python ci3_word_mapreduce.py --reducer" ^
+# -input file:///C:\Users\ADMIN\OneDrive\Documents\cl-3\input.txt ^
+# -output file:///C:\Users\ADMIN\OneDrive\Documents\cl-3\word_output
+
+# type C:\Users\ADMIN\OneDrive\Documents\cl-3\word_output\part-00000

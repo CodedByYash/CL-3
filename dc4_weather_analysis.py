@@ -121,3 +121,13 @@ if __name__ == "__main__":
 #     # Output the result for the last year
 #     if current_year is not None:
 #         print(f"{current_year}\tMax Temperature: {max_temp}\tMin Temperature: {min_temp}")
+
+
+# hadoop jar C:\hadoop\share\hadoop\tools\lib\hadoop-streaming-3.2.4.jar ^
+# -files weather_analysis.py ^
+# -mapper "python weather_analysis.py --mapper" ^
+# -reducer "python weather_analysis.py --reducer" ^
+# -input file:///C:/Users/ADMIN/OneDrive/Documents/CL4/bda3/weather_data.csv ^
+#  -output file:///C:/Users/ADMIN/OneDrive/Documents/CL4/bda3/weather_output
+
+# type C:\Users\ADMIN\OneDrive\Documents\CL4\bda3\weather_output\part-00000
